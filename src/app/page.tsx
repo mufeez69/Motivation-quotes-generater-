@@ -64,6 +64,8 @@ const motivationalConcepts = [
 
 export default function Home() {
   const [quote, setQuote] = useState("");
+  const [quoteEmojis, setQuoteEmojis] = useState<string[]>([]);
+  const [animatedQuote, setAnimatedQuote] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isVisualizing, setIsVisualizing] = useState(false);
   const [quoteImage, setQuoteImage] = useState<string | null>(null);
@@ -71,15 +73,33 @@ export default function Home() {
 
   const luxuryBg = PlaceHolderImages.find((p) => p.id === "luxury-background");
 
+  useEffect(() => {
+    if (quote) {
+      let i = 0;
+      setAnimatedQuote("");
+      const interval = setInterval(() => {
+        setAnimatedQuote((prev) => prev + quote.charAt(i));
+        i++;
+        if (i > quote.length) {
+          clearInterval(interval);
+        }
+      }, 30);
+      return () => clearInterval(interval);
+    }
+  }, [quote]);
+
   const fetchQuote = useCallback(async () => {
     setIsLoading(true);
     setQuoteImage(null);
+    setQuote("");
+    setQuoteEmojis([]);
     try {
       const result = await generateMotivationalQuote({
         theme: "success and perseverance",
         style: "inspirational and concise",
       });
       setQuote(result.quote);
+      setQuoteEmojis(result.emojis);
     } catch (error) {
       console.error("Failed to generate quote:", error);
       toast({
@@ -87,15 +107,14 @@ export default function Home() {
         description: "Could not fetch a new quote. Please try again later.",
         variant: "destructive",
       });
-      if (!quote) {
-        setQuote(
-          "The journey of a thousand miles begins with a single step. - Lao Tzu"
-        );
-      }
+      setQuote(
+        "The journey of a thousand miles begins with a single step. - Lao Tzu"
+      );
+      setQuoteEmojis(["🚀", "🌟"]);
     } finally {
       setIsLoading(false);
     }
-  }, [toast, quote]);
+  }, [toast]);
 
   useEffect(() => {
     fetchQuote();
@@ -214,8 +233,16 @@ export default function Home() {
               ) : (
                 <blockquote className="transition-opacity duration-500 ease-in-out">
                   <p className="text-3xl font-medium leading-relaxed text-slate-100 md:text-4xl">
-                    “{quote}”
+                    “{animatedQuote}”
+                    <span className="animate-pulse">|</span>
                   </p>
+                  <div className="mt-4 flex justify-center gap-2">
+                    {quoteEmojis.map((emoji, index) => (
+                      <span key={index} className="text-2xl">
+                        {emoji}
+                      </span>
+                    ))}
+                  </div>
                 </blockquote>
               )}
             </div>
