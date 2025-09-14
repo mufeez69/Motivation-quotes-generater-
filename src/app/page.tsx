@@ -70,7 +70,6 @@ const motivationalConcepts = [
 export default function Home() {
   const [quote, setQuote] = useState("");
   const [quoteEmojis, setQuoteEmojis] = useState<string[]>([]);
-  const [animatedQuote, setAnimatedQuote] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isVisualizing, setIsVisualizing] = useState(false);
   const [quoteImage, setQuoteImage] = useState<string | null>(null);
@@ -78,21 +77,7 @@ export default function Home() {
   const { toast } = useToast();
 
   const luxuryBg = PlaceHolderImages.find((p) => p.id === "luxury-background");
-
-  useEffect(() => {
-    if (quote) {
-      let i = 0;
-      setAnimatedQuote("");
-      const interval = setInterval(() => {
-        setAnimatedQuote((prev) => prev + quote.charAt(i));
-        i++;
-        if (i > quote.length) {
-          clearInterval(interval);
-        }
-      }, 30);
-      return () => clearInterval(interval);
-    }
-  }, [quote]);
+  const quoteWords = quote.split(" ");
 
   const fetchQuote = useCallback(async () => {
     setIsLoading(true);
@@ -244,12 +229,29 @@ export default function Home() {
               ) : (
                 <blockquote className="transition-opacity duration-500 ease-in-out">
                   <p className="text-3xl font-medium leading-relaxed text-slate-100 md:text-4xl">
-                    “{animatedQuote}”
-                    <span className="animate-pulse">|</span>
+                    “
+                    {quoteWords.map((word, i) => (
+                      <span
+                        key={i}
+                        className="inline-block animate-fade-in-up"
+                        style={{ animationDelay: `${i * 100}ms` }}
+                      >
+                        {word}&nbsp;
+                      </span>
+                    ))}
+                    ”
                   </p>
                   <div className="mt-4 flex justify-center gap-2">
                     {quoteEmojis.map((emoji, index) => (
-                      <span key={index} className="text-2xl">
+                      <span
+                        key={index}
+                        className="text-2xl inline-block animate-fade-in-up"
+                        style={{
+                          animationDelay: `${
+                            (quoteWords.length + index) * 100
+                          }ms`,
+                        }}
+                      >
                         {emoji}
                       </span>
                     ))}
