@@ -43,6 +43,7 @@ const motivationalConcepts = [
     color: "text-purple-400",
     hoverColor: "hover:bg-purple-500/20 hover:border-purple-400/50",
     shadow: "shadow-purple-500/50",
+    activeColor: "bg-purple-500/30 border-purple-400/60",
   },
   {
     Icon: Mountain,
@@ -50,6 +51,7 @@ const motivationalConcepts = [
     color: "text-sky-400",
     hoverColor: "hover:bg-sky-500/20 hover:border-sky-400/50",
     shadow: "shadow-sky-500/50",
+    activeColor: "bg-sky-500/30 border-sky-400/60",
   },
   {
     Icon: Repeat,
@@ -57,6 +59,7 @@ const motivationalConcepts = [
     color: "text-emerald-400",
     hoverColor: "hover:bg-emerald-500/20 hover:border-emerald-400/50",
     shadow: "shadow-emerald-500/50",
+    activeColor: "bg-emerald-500/30 border-emerald-400/60",
   },
   {
     Icon: Sunrise,
@@ -64,6 +67,7 @@ const motivationalConcepts = [
     color: "text-amber-400",
     hoverColor: "hover:bg-amber-500/20 hover:border-amber-400/50",
     shadow: "shadow-amber-500/50",
+    activeColor: "bg-amber-500/30 border-amber-400/60",
   },
 ];
 
@@ -87,6 +91,7 @@ export default function Home() {
   const [isVisualizing, setIsVisualizing] = useState(false);
   const [quoteImage, setQuoteImage] = useState<string | null>(null);
   const [showSignature, setShowSignature] = useState(false);
+  const [selectedConcepts, setSelectedConcepts] = useState<string[]>([]);
   const { toast } = useToast();
 
   const luxuryBg = PlaceHolderImages.find((p) => p.id === "luxury-background");
@@ -98,11 +103,15 @@ export default function Home() {
     setQuote("");
     setQuoteEmojis([]);
     try {
-      const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+      const theme =
+        selectedConcepts.length > 0
+          ? selectedConcepts.join(", ")
+          : themes[Math.floor(Math.random() * themes.length)];
+
       const randomStyle = styles[Math.floor(Math.random() * styles.length)];
 
       const result = await generateMotivationalQuote({
-        theme: randomTheme,
+        theme: theme,
         style: randomStyle,
       });
       setQuote(result.quote);
@@ -121,12 +130,20 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, [toast]);
+  }, [toast, selectedConcepts]);
 
   useEffect(() => {
     fetchQuote();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  const handleConceptClick = (concept: string) => {
+    setSelectedConcepts((prev) =>
+      prev.includes(concept)
+        ? prev.filter((c) => c !== concept)
+        : [...prev, concept]
+    );
+  };
 
   const handleVisualize = async () => {
     if (!quote) return;
@@ -206,25 +223,30 @@ export default function Home() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
       <div className="relative z-20 flex w-full max-w-2xl flex-col items-center gap-8 text-center">
         <div className="grid grid-cols-2 gap-4 md:flex md:flex-wrap md:items-center md:justify-center md:gap-8 mb-4">
-          {motivationalConcepts.map((concept, index) => (
-            <div
-              key={index}
-              className={cn(
-                "flex items-center justify-center gap-2 rounded-full bg-black/50 px-4 py-2 border border-white/10 shadow-lg transition-all duration-300 transform hover:scale-105",
-                concept.hoverColor
-              )}
-            >
-              <concept.Icon className={cn("h-5 w-5", concept.color)} />
-              <span
+          {motivationalConcepts.map((concept, index) => {
+            const isActive = selectedConcepts.includes(concept.text);
+            return (
+              <button
+                key={index}
+                onClick={() => handleConceptClick(concept.text)}
                 className={cn(
-                  "font-semibold text-sm tracking-wide text-white",
-                  concept.color
+                  "flex items-center justify-center gap-2 rounded-full bg-black/50 px-4 py-2 border border-white/10 shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer",
+                  concept.hoverColor,
+                  isActive && concept.activeColor
                 )}
               >
-                {concept.text}
-              </span>
-            </div>
-          ))}
+                <concept.Icon className={cn("h-5 w-5", concept.color)} />
+                <span
+                  className={cn(
+                    "font-semibold text-sm tracking-wide text-white",
+                    concept.color
+                  )}
+                >
+                  {concept.text}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary hover:shadow-primary/50">
@@ -396,5 +418,3 @@ export default function Home() {
       </div>
     </main>
   );
-
-    
