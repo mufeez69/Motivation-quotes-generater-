@@ -215,7 +215,7 @@ export default function Home() {
           ))}
         </div>
 
-        <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/50 hover:shadow-primary/30">
+        <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary hover:shadow-primary/50">
           <CardContent className="flex min-h-[280px] flex-col items-center justify-center gap-8 p-8 md:p-12">
             <div className="relative flex w-full flex-grow items-center justify-center">
               {isLoading && !quote ? (
