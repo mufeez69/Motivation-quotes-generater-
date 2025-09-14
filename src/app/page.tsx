@@ -12,8 +12,10 @@ import {
   Mountain,
   Repeat,
   Sunrise,
+  Image as ImageIcon,
 } from "lucide-react";
 import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quote";
+import { generateQuoteImage } from "@/ai/flows/generate-quote-image";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -62,12 +64,15 @@ const motivationalConcepts = [
 export default function Home() {
   const [quote, setQuote] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isVisualizing, setIsVisualizing] = useState(false);
+  const [quoteImage, setQuoteImage] = useState<string | null>(null);
   const { toast } = useToast();
 
   const luxuryBg = PlaceHolderImages.find((p) => p.id === "luxury-background");
 
   const fetchQuote = useCallback(async () => {
     setIsLoading(true);
+    setQuoteImage(null);
     try {
       const result = await generateMotivationalQuote({
         theme: "success and perseverance",
@@ -95,6 +100,24 @@ export default function Home() {
     fetchQuote();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleVisualize = async () => {
+    if (!quote) return;
+    setIsVisualizing(true);
+    try {
+      const result = await generateQuoteImage({ quote });
+      setQuoteImage(result.imageUrl);
+    } catch (error) {
+      console.error("Failed to generate quote image:", error);
+      toast({
+        title: "Error Visualizing Quote",
+        description: "Could not generate an image. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsVisualizing(false);
+    }
+  };
 
   const handleShare = (platform: "whatsapp" | "instagram" | "copy") => {
     if (!quote) return;
@@ -154,6 +177,16 @@ export default function Home() {
             <div className="relative flex w-full flex-grow items-center justify-center">
               {isLoading && !quote ? (
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              ) : isVisualizing ? (
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              ) : quoteImage ? (
+                <Image
+                  src={quoteImage}
+                  alt={quote}
+                  width={512}
+                  height={512}
+                  className="rounded-lg object-cover"
+                />
               ) : (
                 <blockquote className="transition-opacity duration-500 ease-in-out">
                   <p className="text-3xl font-medium leading-relaxed text-slate-100 md:text-4xl">
@@ -162,31 +195,54 @@ export default function Home() {
                 </blockquote>
               )}
             </div>
-            <div className="relative group">
-              <div
-                className={cn(
-                  "absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 blur opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200",
-                  !isLoading && "animate-tilt"
-                )}
-              ></div>
-              <Button
-                onClick={fetchQuote}
-                disabled={isLoading}
-                size="lg"
-                className="relative group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Zap className="mr-2 h-6 w-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-125" />
-                    Generate Inspiration
-                  </>
-                )}
-              </Button>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="relative group">
+                <div
+                  className={cn(
+                    "absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 blur opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200",
+                    !isLoading && "animate-tilt"
+                  )}
+                ></div>
+                <Button
+                  onClick={fetchQuote}
+                  disabled={isLoading || isVisualizing}
+                  size="lg"
+                  className="relative group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="mr-2 h-6 w-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-125" />
+                      New Quote
+                    </>
+                  )}
+                </Button>
+              </div>
+              {quote && !isLoading && (
+                <Button
+                  onClick={handleVisualize}
+                  disabled={isVisualizing}
+                  size="lg"
+                  variant="outline"
+                  className="relative group rounded-full bg-black/50 border-primary/50 px-10 py-8 text-xl font-bold text-primary shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/10 hover:shadow-primary/30 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                >
+                  {isVisualizing ? (
+                    <>
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                      Visualizing...
+                    </>
+                  ) : (
+                    <>
+                      <ImageIcon className="mr-2 h-6 w-6" />
+                      Visualize Quote
+                    </>
+                  )}
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
