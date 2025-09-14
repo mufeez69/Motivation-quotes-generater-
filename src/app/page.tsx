@@ -153,16 +153,16 @@ export default function Home() {
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
       <div className="relative z-20 flex w-full max-w-2xl flex-col items-center gap-8 text-center">
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 mb-8">
+        <div className="grid grid-cols-2 gap-4 md:flex md:flex-wrap md:items-center md:justify-center md:gap-8 mb-4">
           {motivationalConcepts.map((concept, index) => (
             <div
               key={index}
-              className="flex items-center gap-2 rounded-full bg-black/50 px-4 py-2 border border-white/10 shadow-lg"
+              className="flex items-center justify-center gap-2 rounded-full bg-black/50 px-4 py-2 border border-white/10 shadow-lg"
             >
-              <concept.Icon className={cn("h-6 w-6", concept.color)} />
+              <concept.Icon className={cn("h-5 w-5", concept.color)} />
               <span
                 className={cn(
-                  "font-semibold tracking-wide text-white",
+                  "font-semibold text-sm tracking-wide text-white",
                   concept.color
                 )}
               >
@@ -279,3 +279,5 @@ export default function Home() {
     </main>
   );
 }
+
+    
