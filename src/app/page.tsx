@@ -3,7 +3,16 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, Zap, Copy, Send } from "lucide-react";
+import {
+  Loader2,
+  Zap,
+  Copy,
+  Send,
+  Target,
+  Mountain,
+  Repeat,
+  Sunrise,
+} from "lucide-react";
 import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quote";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
@@ -23,13 +32,39 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
+const motivationalConcepts = [
+  {
+    Icon: Target,
+    text: "Discipline",
+    color: "text-purple-400",
+    shadow: "shadow-purple-500/50",
+  },
+  {
+    Icon: Mountain,
+    text: "Hard Work",
+    color: "text-sky-400",
+    shadow: "shadow-sky-500/50",
+  },
+  {
+    Icon: Repeat,
+    text: "Consistency",
+    color: "text-emerald-400",
+    shadow: "shadow-emerald-500/50",
+  },
+  {
+    Icon: Sunrise,
+    text: "Motivation",
+    color: "text-amber-400",
+    shadow: "shadow-amber-500/50",
+  },
+];
 
 export default function Home() {
   const [quote, setQuote] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  const luxuryBg = PlaceHolderImages.find(p => p.id === 'luxury-background');
+  const luxuryBg = PlaceHolderImages.find((p) => p.id === "luxury-background");
 
   const fetchQuote = useCallback(async () => {
     setIsLoading(true);
@@ -47,7 +82,9 @@ export default function Home() {
         variant: "destructive",
       });
       if (!quote) {
-        setQuote("The journey of a thousand miles begins with a single step. - Lao Tzu");
+        setQuote(
+          "The journey of a thousand miles begins with a single step. - Lao Tzu"
+        );
       }
     } finally {
       setIsLoading(false);
@@ -59,21 +96,22 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleShare = (platform: 'whatsapp' | 'instagram' | 'copy') => {
+  const handleShare = (platform: "whatsapp" | "instagram" | "copy") => {
     if (!quote) return;
 
     const textToShare = `"${quote}" - Get your daily inspiration from MotivateNow!`;
     const encodedText = encodeURIComponent(textToShare);
 
-    if (platform === 'whatsapp') {
-      window.open(`https://wa.me/?text=${encodedText}`, '_blank');
-    } else if (platform === 'instagram' || platform === 'copy') {
+    if (platform === "whatsapp") {
+      window.open(`https://wa.me/?text=${encodedText}`, "_blank");
+    } else if (platform === "instagram" || platform === "copy") {
       navigator.clipboard.writeText(textToShare).then(() => {
         toast({
           title: "Copied to Clipboard!",
-          description: platform === 'instagram' 
-            ? "Ready to paste in your Instagram story or post."
-            : "You can now share the quote anywhere.",
+          description:
+            platform === "instagram"
+              ? "Ready to paste in your Instagram story or post."
+              : "You can now share the quote anywhere.",
         });
       });
     }
@@ -92,11 +130,27 @@ export default function Home() {
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
       <div className="relative z-20 flex w-full max-w-2xl flex-col items-center gap-8 text-center">
-        <h1 className="font-headline text-5xl font-extrabold tracking-tight text-white sm:text-6xl md:text-7xl">
-          Ignite Your Spark
-        </h1>
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
+          {motivationalConcepts.map((concept, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-2 rounded-full bg-black/50 px-4 py-2 border border-white/10 shadow-lg"
+            >
+              <concept.Icon className={cn("h-6 w-6", concept.color)} />
+              <span
+                className={cn(
+                  "font-semibold tracking-wide text-white",
+                  concept.color
+                )}
+              >
+                {concept.text}
+              </span>
+            </div>
+          ))}
+        </div>
         <p className="max-w-xl text-lg text-slate-300 md:text-xl leading-relaxed">
-          Tap into a universe of motivation. A new powerful quote is just a click away.
+          Tap into a universe of motivation. A new powerful quote is just a
+          click away.
         </p>
         <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/50 hover:shadow-primary/30">
           <CardContent className="flex min-h-[280px] flex-col items-center justify-center gap-8 p-8 md:p-12">
@@ -139,16 +193,31 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
-         <div className="flex items-center justify-center gap-4 mt-2">
-          <Button onClick={() => handleShare('whatsapp')} variant="ghost" size="icon" className="group rounded-full bg-black/50 text-slate-300 hover:bg-primary/80 hover:text-white transition-all duration-300">
+        <div className="flex items-center justify-center gap-4 mt-2">
+          <Button
+            onClick={() => handleShare("whatsapp")}
+            variant="ghost"
+            size="icon"
+            className="group rounded-full bg-black/50 text-slate-300 hover:bg-primary/80 hover:text-white transition-all duration-300"
+          >
             <WhatsAppIcon />
             <span className="sr-only">Share on WhatsApp</span>
           </Button>
-          <Button onClick={() => handleShare('instagram')} variant="ghost" size="icon" className="group rounded-full bg-black/50 text-slate-300 hover:bg-primary/80 hover:text-white transition-all duration-300">
+          <Button
+            onClick={() => handleShare("instagram")}
+            variant="ghost"
+            size="icon"
+            className="group rounded-full bg-black/50 text-slate-300 hover:bg-primary/80 hover:text-white transition-all duration-300"
+          >
             <Send className="h-5 w-5" />
             <span className="sr-only">Copy for Instagram</span>
           </Button>
-          <Button onClick={() => handleShare('copy')} variant="ghost" size="icon" className="group rounded-full bg-black/50 text-slate-300 hover:bg-primary/80 hover:text-white transition-all duration-300">
+          <Button
+            onClick={() => handleShare("copy")}
+            variant="ghost"
+            size="icon"
+            className="group rounded-full bg-black/50 text-slate-300 hover:bg-primary/80 hover:text-white transition-all duration-300"
+          >
             <Copy className="h-5 w-5" />
             <span className="sr-only">Copy quote</span>
           </Button>
