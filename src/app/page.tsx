@@ -8,6 +8,7 @@ import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quot
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   const [quote, setQuote] = useState("");
@@ -76,24 +77,32 @@ export default function Home() {
                 </blockquote>
               )}
             </div>
-            <Button
-              onClick={fetchQuote}
-              disabled={isLoading}
-              size="lg"
-              className="group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Zap className="mr-2 h-6 w-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-125" />
-                  Generate Inspiration
-                </>
-              )}
-            </Button>
+            <div className="relative group">
+              <div
+                className={cn(
+                  "absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 blur opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200",
+                  !isLoading && "animate-tilt"
+                )}
+              ></div>
+              <Button
+                onClick={fetchQuote}
+                disabled={isLoading}
+                size="lg"
+                className="relative group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Zap className="mr-2 h-6 w-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-125" />
+                    Generate Inspiration
+                  </>
+                )}
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
