@@ -14,6 +14,7 @@ import {
   Sunrise,
   Image as ImageIcon,
   Download,
+  Sparkles,
 } from "lucide-react";
 import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quote";
 import { generateQuoteImage } from "@/ai/flows/generate-quote-image";
@@ -73,6 +74,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isVisualizing, setIsVisualizing] = useState(false);
   const [quoteImage, setQuoteImage] = useState<string | null>(null);
+  const [showSignature, setShowSignature] = useState(false);
   const { toast } = useToast();
 
   const luxuryBg = PlaceHolderImages.find((p) => p.id === "luxury-background");
@@ -186,6 +188,8 @@ export default function Home() {
       description: "Your inspirational image is being saved.",
     });
   };
+
+  const signatureText = "made by MUFIZ MIRZA".split(" ");
 
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background p-4 font-body overflow-hidden">
@@ -343,6 +347,34 @@ export default function Home() {
             <span className="sr-only">Download image</span>
           </Button>
         </div>
+      </div>
+
+      <div
+        className="fixed bottom-4 right-4 z-30 cursor-pointer"
+        onClick={() => setShowSignature(!showSignature)}
+      >
+        {!showSignature ? (
+          <div className="flex items-center gap-2 text-white/50 hover:text-white/80 transition-colors">
+            <Sparkles className="h-4 w-4" />
+            <span className="text-xs font-mono">...</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-1.5 text-sm font-medium">
+            {signatureText.map((word, index) => (
+              <span
+                key={index}
+                className="inline-block bg-gradient-to-r from-fuchsia-500 via-red-500 to-amber-500 bg-clip-text text-transparent opacity-0 transition-all duration-500"
+                style={{
+                  transform: showSignature ? "translateY(0)" : "translateY(10px)",
+                  opacity: showSignature ? 1 : 0,
+                  transitionDelay: `${index * 100}ms`,
+                }}
+              >
+                {word}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
