@@ -40,24 +40,28 @@ const motivationalConcepts = [
     Icon: Target,
     text: "Discipline",
     color: "text-purple-400",
+    hoverColor: "hover:bg-purple-500/20 hover:border-purple-400/50",
     shadow: "shadow-purple-500/50",
   },
   {
     Icon: Mountain,
     text: "Hard Work",
     color: "text-sky-400",
+    hoverColor: "hover:bg-sky-500/20 hover:border-sky-400/50",
     shadow: "shadow-sky-500/50",
   },
   {
     Icon: Repeat,
     text: "Consistency",
     color: "text-emerald-400",
+    hoverColor: "hover:bg-emerald-500/20 hover:border-emerald-400/50",
     shadow: "shadow-emerald-500/50",
   },
   {
     Icon: Sunrise,
     text: "Motivation",
     color: "text-amber-400",
+    hoverColor: "hover:bg-amber-500/20 hover:border-amber-400/50",
     shadow: "shadow-amber-500/50",
   },
 ];
@@ -200,7 +204,10 @@ export default function Home() {
           {motivationalConcepts.map((concept, index) => (
             <div
               key={index}
-              className="flex items-center justify-center gap-2 rounded-full bg-black/50 px-4 py-2 border border-white/10 shadow-lg"
+              className={cn(
+                "flex items-center justify-center gap-2 rounded-full bg-black/50 px-4 py-2 border border-white/10 shadow-lg transition-all duration-300 transform hover:scale-105",
+                concept.hoverColor
+              )}
             >
               <concept.Icon className={cn("h-5 w-5", concept.color)} />
               <span
