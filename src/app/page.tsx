@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, Zap } from "lucide-react";
 import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quote";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
@@ -21,7 +21,7 @@ export default function Home() {
     try {
       const result = await generateMotivationalQuote({
         theme: "success and perseverance",
-        style: "inspirational",
+        style: "inspirational and concise",
       });
       setQuote(result.quote);
     } catch (error) {
@@ -51,26 +51,26 @@ export default function Home() {
           src={luxuryBg.imageUrl}
           alt={luxuryBg.description}
           fill
-          className="object-cover z-0"
+          className="object-cover z-0 brightness-50"
           data-ai-hint={luxuryBg.imageHint}
         />
       )}
-      <div className="absolute inset-0 bg-black/60 z-10" />
-      <div className="relative z-20 flex w-full max-w-2xl flex-col items-center gap-6 text-center">
-        <h1 className="font-headline text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
-          MotivateNow
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
+      <div className="relative z-20 flex w-full max-w-2xl flex-col items-center gap-8 text-center">
+        <h1 className="font-headline text-5xl font-extrabold tracking-tight text-white sm:text-6xl md:text-7xl">
+          Ignite Your Spark
         </h1>
-        <p className="max-w-md text-lg text-slate-200 md:text-xl">
-          Your daily dose of inspiration. Click the button below to generate a new quote.
+        <p className="max-w-xl text-lg text-slate-300 md:text-xl leading-relaxed">
+          Tap into a universe of motivation. A new powerful quote is just a click away.
         </p>
-        <Card className="w-full rounded-xl border-primary/20 bg-black/50 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-primary/20 hover:shadow-2xl">
-          <CardContent className="flex min-h-[250px] flex-col items-center justify-center gap-8 p-8">
+        <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/50 hover:shadow-primary/30">
+          <CardContent className="flex min-h-[280px] flex-col items-center justify-center gap-8 p-8 md:p-12">
             <div className="relative flex w-full flex-grow items-center justify-center">
               {isLoading && !quote ? (
-                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
               ) : (
-                <blockquote className="transition-opacity duration-300">
-                  <p className="text-2xl font-medium leading-relaxed text-slate-100 md:text-3xl">
+                <blockquote className="transition-opacity duration-500 ease-in-out">
+                  <p className="text-3xl font-medium leading-relaxed text-slate-100 md:text-4xl">
                     “{quote}”
                   </p>
                 </blockquote>
@@ -80,15 +80,18 @@ export default function Home() {
               onClick={fetchQuote}
               disabled={isLoading}
               size="lg"
-              className="rounded-full bg-primary px-8 py-6 text-lg font-bold text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-300 ease-in-out hover:scale-110 hover:bg-primary/90 hover:shadow-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin" />
                   Generating...
                 </>
               ) : (
-                "Generate New Quote"
+                <>
+                  <Zap className="mr-2 h-6 w-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-125" />
+                  Generate Inspiration
+                </>
               )}
             </Button>
           </CardContent>
