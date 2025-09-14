@@ -56,8 +56,21 @@ const generateMotivationalQuoteFlow = ai.defineFlow(
     inputSchema: GenerateMotivationalQuoteInputSchema,
     outputSchema: GenerateMotivationalQuoteOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+  async (input) => {
+    let retries = 3;
+    while (retries > 0) {
+      try {
+        const {output} = await prompt(input);
+        return output!;
+      } catch (error) {
+        console.error(`Attempt failed: ${error}`);
+        retries--;
+        if (retries === 0) {
+          throw error;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+    }
+    throw new Error('Failed to generate quote after multiple retries.');
   }
 );
