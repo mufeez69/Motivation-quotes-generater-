@@ -13,6 +13,7 @@ import {
   Repeat,
   Sunrise,
   Image as ImageIcon,
+  Download,
 } from "lucide-react";
 import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quote";
 import { generateQuoteImage } from "@/ai/flows/generate-quote-image";
@@ -140,6 +141,29 @@ export default function Home() {
     }
   };
 
+  const handleDownload = () => {
+    if (!quoteImage) {
+      toast({
+        title: "No Image to Download",
+        description: "Please visualize a quote first before downloading.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = quoteImage;
+    link.download = `motivate-now-quote.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: "Image Downloading...",
+      description: "Your inspirational image is being saved.",
+    });
+  };
+
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background p-4 font-body overflow-hidden">
       {luxuryBg && (
@@ -251,7 +275,7 @@ export default function Home() {
             onClick={() => handleShare("whatsapp")}
             variant="ghost"
             size="icon"
-            className="group rounded-full bg-black/50 text-slate-300 hover:bg-primary/80 hover:text-white transition-all duration-300"
+            className="group rounded-full bg-black/50 text-[#25D366] hover:bg-[#25D366]/90 hover:text-white transition-all duration-300 hover:scale-110"
           >
             <WhatsAppIcon />
             <span className="sr-only">Share on WhatsApp</span>
@@ -260,7 +284,7 @@ export default function Home() {
             onClick={() => handleShare("instagram")}
             variant="ghost"
             size="icon"
-            className="group rounded-full bg-black/50 text-slate-300 hover:bg-primary/80 hover:text-white transition-all duration-300"
+            className="group rounded-full bg-black/50 text-[#E4405F] hover:bg-[#E4405F]/90 hover:text-white transition-all duration-300 hover:scale-110"
           >
             <Send className="h-5 w-5" />
             <span className="sr-only">Copy for Instagram</span>
@@ -269,15 +293,23 @@ export default function Home() {
             onClick={() => handleShare("copy")}
             variant="ghost"
             size="icon"
-            className="group rounded-full bg-black/50 text-slate-300 hover:bg-primary/80 hover:text-white transition-all duration-300"
+            className="group rounded-full bg-black/50 text-[#60A5FA] hover:bg-[#60A5FA]/90 hover:text-white transition-all duration-300 hover:scale-110"
           >
             <Copy className="h-5 w-5" />
             <span className="sr-only">Copy quote</span>
+          </Button>
+          <Button
+            onClick={handleDownload}
+            variant="ghost"
+            size="icon"
+            disabled={!quoteImage}
+            className="group rounded-full bg-black/50 text-slate-300 hover:bg-slate-500/90 hover:text-white transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download className="h-5 w-5" />
+            <span className="sr-only">Download image</span>
           </Button>
         </div>
       </div>
     </main>
   );
 }
-
-    
