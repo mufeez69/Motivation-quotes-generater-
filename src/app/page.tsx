@@ -67,6 +67,19 @@ const motivationalConcepts = [
   },
 ];
 
+const themes = [
+  "success", "perseverance", "hard work", "discipline", "consistency", 
+  "self-belief", "resilience", "overcoming adversity", "growth mindset",
+  "ambition", "dreams", "goals", "focus", "determination", "courage",
+  "innovation", "leadership", "positivity", "gratitude", "mindfulness"
+];
+
+const styles = [
+  "inspirational", "concise", "profound", "poetic", "direct", 
+  "metaphorical", "powerful", "uplifting", "thought-provoking", "witty",
+  "philosophical", "encouraging", "visionary", "reflective"
+];
+
 export default function Home() {
   const [quote, setQuote] = useState("");
   const [quoteEmojis, setQuoteEmojis] = useState<string[]>([]);
@@ -85,9 +98,12 @@ export default function Home() {
     setQuote("");
     setQuoteEmojis([]);
     try {
+      const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+      const randomStyle = styles[Math.floor(Math.random() * styles.length)];
+
       const result = await generateMotivationalQuote({
-        theme: "success and perseverance",
-        style: "inspirational and concise",
+        theme: randomTheme,
+        style: randomStyle,
       });
       setQuote(result.quote);
       setQuoteEmojis(result.emojis);
@@ -380,4 +396,5 @@ export default function Home() {
       </div>
     </main>
   );
-}
+
+    
