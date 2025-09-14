@@ -355,7 +355,7 @@ export default function Home() {
       >
         {!showSignature ? (
           <div className="flex items-center gap-2 text-white/50 hover:text-white/80 transition-colors">
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-4 w-4 animate-pulse" />
             <span className="text-xs font-mono">...</span>
           </div>
         ) : (
