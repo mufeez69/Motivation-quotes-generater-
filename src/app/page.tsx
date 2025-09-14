@@ -15,6 +15,10 @@ import {
   Image as ImageIcon,
   Download,
   Sparkles,
+  Trophy,
+  ShieldOff,
+  HeartHandshake,
+  TrendingUp,
 } from "lucide-react";
 import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quote";
 import { generateQuoteImage } from "@/ai/flows/generate-quote-image";
@@ -41,33 +45,57 @@ const motivationalConcepts = [
     Icon: Target,
     text: "Discipline",
     color: "text-purple-400",
-    hoverColor: "hover:bg-purple-500/20 hover:border-purple-400/50",
-    shadow: "shadow-purple-500/50",
-    activeColor: "bg-purple-500/30 border-purple-400/60",
+    hoverColor: "hover:border-purple-400 hover:shadow-purple-400/50",
+    activeColor: "bg-purple-500/30 border-purple-400",
   },
   {
     Icon: Mountain,
     text: "Hard Work",
     color: "text-sky-400",
-    hoverColor: "hover:bg-sky-500/20 hover:border-sky-400/50",
-    shadow: "shadow-sky-500/50",
-    activeColor: "bg-sky-500/30 border-sky-400/60",
+    hoverColor: "hover:border-sky-400 hover:shadow-sky-400/50",
+    activeColor: "bg-sky-500/30 border-sky-400",
   },
   {
     Icon: Repeat,
     text: "Consistency",
     color: "text-emerald-400",
-    hoverColor: "hover:bg-emerald-500/20 hover:border-emerald-400/50",
-    shadow: "shadow-emerald-500/50",
-    activeColor: "bg-emerald-500/30 border-emerald-400/60",
+    hoverColor: "hover:border-emerald-400 hover:shadow-emerald-400/50",
+    activeColor: "bg-emerald-500/30 border-emerald-400",
   },
   {
     Icon: Sunrise,
     text: "Motivation",
     color: "text-amber-400",
-    hoverColor: "hover:bg-amber-500/20 hover:border-amber-400/50",
-    shadow: "shadow-amber-500/50",
-    activeColor: "bg-amber-500/30 border-amber-400/60",
+    hoverColor: "hover:border-amber-400 hover:shadow-amber-400/50",
+    activeColor: "bg-amber-500/30 border-amber-400",
+  },
+  {
+    Icon: Trophy,
+    text: "Success",
+    color: "text-yellow-400",
+    hoverColor: "hover:border-yellow-400 hover:shadow-yellow-400/50",
+    activeColor: "bg-yellow-500/30 border-yellow-400",
+  },
+  {
+    Icon: ShieldOff,
+    text: "Failure",
+    color: "text-red-400",
+    hoverColor: "hover:border-red-400 hover:shadow-red-400/50",
+    activeColor: "bg-red-500/30 border-red-400",
+  },
+  {
+    Icon: HeartHandshake,
+    text: "Resilience",
+    color: "text-rose-400",
+    hoverColor: "hover:border-rose-400 hover:shadow-rose-400/50",
+    activeColor: "bg-rose-500/30 border-rose-400",
+  },
+  {
+    Icon: TrendingUp,
+    text: "Growth",
+    color: "text-lime-400",
+    hoverColor: "hover:border-lime-400 hover:shadow-lime-400/50",
+    activeColor: "bg-lime-500/30 border-lime-400",
   },
 ];
 
@@ -221,8 +249,8 @@ export default function Home() {
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
-      <div className="relative z-20 flex w-full max-w-2xl flex-col items-center gap-8 text-center">
-        <div className="grid grid-cols-2 gap-4 md:flex md:flex-wrap md:items-center md:justify-center md:gap-8 mb-4">
+      <div className="relative z-20 flex w-full max-w-4xl flex-col items-center gap-8 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full mb-4">
           {motivationalConcepts.map((concept, index) => {
             const isActive = selectedConcepts.includes(concept.text);
             return (
@@ -230,7 +258,7 @@ export default function Home() {
                 key={index}
                 onClick={() => handleConceptClick(concept.text)}
                 className={cn(
-                  "flex items-center justify-center gap-2 rounded-full bg-black/50 px-4 py-2 border border-white/10 shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer",
+                  "flex items-center justify-center gap-2 rounded-full bg-black/50 px-4 py-2 border-2 border-transparent shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-black/70",
                   concept.hoverColor,
                   isActive && concept.activeColor
                 )}
@@ -238,7 +266,7 @@ export default function Home() {
                 <concept.Icon className={cn("h-5 w-5", concept.color)} />
                 <span
                   className={cn(
-                    "font-semibold text-sm tracking-wide text-white",
+                    "font-semibold text-sm tracking-wide text-white/80",
                     concept.color
                   )}
                 >
@@ -418,3 +446,5 @@ export default function Home() {
       </div>
     </main>
   );
+
+    
