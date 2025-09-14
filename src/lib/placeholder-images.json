@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "luxury-background",
+      "description": "A luxurious, abstract background with golden hues.",
+      "imageUrl": "https://picsum.photos/seed/luxury/1920/1080",
+      "imageHint": "luxury abstract"
+    }
+  ]
 }
