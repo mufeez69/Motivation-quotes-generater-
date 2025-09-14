@@ -130,7 +130,7 @@ export default function Home() {
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
       <div className="relative z-20 flex w-full max-w-2xl flex-col items-center gap-8 text-center">
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 mb-8">
           {motivationalConcepts.map((concept, index) => (
             <div
               key={index}
@@ -148,10 +148,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <p className="max-w-xl text-lg text-slate-300 md:text-xl leading-relaxed">
-          Tap into a universe of motivation. A new powerful quote is just a
-          click away.
-        </p>
+
         <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/50 hover:shadow-primary/30">
           <CardContent className="flex min-h-[280px] flex-col items-center justify-center gap-8 p-8 md:p-12">
             <div className="relative flex w-full flex-grow items-center justify-center">
