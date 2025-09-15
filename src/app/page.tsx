@@ -63,13 +63,6 @@ const motivationalConcepts = [
     activeColor: "bg-emerald-500/30 border-emerald-400",
   },
   {
-    Icon: Sunrise,
-    text: "Motivation",
-    color: "text-amber-400",
-    hoverColor: "hover:border-amber-400 hover:shadow-amber-400/50",
-    activeColor: "bg-amber-500/30 border-amber-400",
-  },
-  {
     Icon: Trophy,
     text: "Success",
     color: "text-yellow-400",
@@ -82,13 +75,6 @@ const motivationalConcepts = [
     color: "text-red-400",
     hoverColor: "hover:border-red-400 hover:shadow-red-400/50",
     activeColor: "bg-red-500/30 border-red-400",
-  },
-  {
-    Icon: HeartHandshake,
-    text: "Resilience",
-    color: "text-rose-400",
-    hoverColor: "hover:border-rose-400 hover:shadow-rose-400/50",
-    activeColor: "bg-rose-500/30 border-rose-400",
   },
   {
     Icon: TrendingUp,
@@ -255,7 +241,7 @@ export default function Home() {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
         <div className="relative z-20 flex w-full max-w-4xl flex-col items-center gap-8 text-center">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 w-full mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 w-full mb-4">
             {motivationalConcepts.map((concept, index) => {
               const isActive = selectedConcepts.includes(concept.text);
               return (
