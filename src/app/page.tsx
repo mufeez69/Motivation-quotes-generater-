@@ -11,13 +11,11 @@ import {
   Target,
   Mountain,
   Repeat,
-  Sunrise,
   Image as ImageIcon,
   Download,
   Sparkles,
   Trophy,
   ShieldOff,
-  HeartHandshake,
   TrendingUp,
 } from "lucide-react";
 import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quote";
@@ -268,7 +266,7 @@ export default function Home() {
             })}
           </div>
 
-          <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary hover:shadow-primary/50">
+          <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/80 hover:shadow-primary/50">
             <CardContent className="flex min-h-[280px] flex-col items-center justify-center gap-8 p-8 md:p-12">
               <div className="relative flex w-full flex-grow items-center justify-center">
                 {isLoading && !quote ? (
@@ -434,11 +432,9 @@ export default function Home() {
             {signatureText.map((word, index) => (
               <span
                 key={index}
-                className="inline-block bg-gradient-to-r from-fuchsia-500 via-red-500 to-amber-500 bg-clip-text text-transparent opacity-0 transition-all duration-500"
+                className="inline-block animate-fade-in-up bg-gradient-to-r from-fuchsia-500 via-red-500 to-amber-500 bg-clip-text text-transparent"
                 style={{
-                  transform: showSignature ? "translateY(0)" : "translateY(10px)",
-                  opacity: showSignature ? 1 : 0,
-                  transitionDelay: `${index * 100}ms`,
+                  animationDelay: `${index * 100}ms`,
                 }}
               >
                 {word}
