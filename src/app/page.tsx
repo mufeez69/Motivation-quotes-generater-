@@ -242,195 +242,197 @@ export default function Home() {
   const signatureText = "made by MUFIZ MIRZA".split(" ");
 
   return (
-    <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background p-4 font-body overflow-hidden">
-      {luxuryBg && (
-        <Image
-          src={luxuryBg.imageUrl}
-          alt={luxuryBg.description}
-          fill
-          className="object-cover z-0 brightness-50"
-          data-ai-hint={luxuryBg.imageHint}
-        />
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
-      <div className="relative z-20 flex w-full max-w-4xl flex-col items-center gap-8 text-center">
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 w-full mb-4">
-          {motivationalConcepts.map((concept, index) => {
-            const isActive = selectedConcepts.includes(concept.text);
-            return (
-              <button
-                key={index}
-                onClick={() => handleConceptClick(concept.text)}
-                className={cn(
-                  "flex items-center justify-center gap-2 rounded-full bg-black/50 px-4 py-2 border-2 border-transparent shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-black/70",
-                  concept.hoverColor,
-                  isActive && concept.activeColor
-                )}
-              >
-                <concept.Icon className={cn("h-5 w-5", concept.color)} />
-                <span
+    <div className="relative">
+      <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background p-4 font-body overflow-hidden">
+        {luxuryBg && (
+          <Image
+            src={luxuryBg.imageUrl}
+            alt={luxuryBg.description}
+            fill
+            className="object-cover z-0 brightness-50"
+            data-ai-hint={luxuryBg.imageHint}
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
+        <div className="relative z-20 flex w-full max-w-4xl flex-col items-center gap-8 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 w-full mb-4">
+            {motivationalConcepts.map((concept, index) => {
+              const isActive = selectedConcepts.includes(concept.text);
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleConceptClick(concept.text)}
                   className={cn(
-                    "font-semibold text-sm tracking-wide text-white/80",
-                    concept.color
+                    "flex items-center justify-center gap-2 rounded-full bg-black/50 px-4 py-2 border-2 border-transparent shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-black/70",
+                    concept.hoverColor,
+                    isActive && concept.activeColor
                   )}
                 >
-                  {concept.text}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                  <concept.Icon className={cn("h-5 w-5", concept.color)} />
+                  <span
+                    className={cn(
+                      "font-semibold text-sm tracking-wide text-white/80",
+                      concept.color
+                    )}
+                  >
+                    {concept.text}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
-        <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary hover:shadow-primary/50">
-          <CardContent className="flex min-h-[280px] flex-col items-center justify-center gap-8 p-8 md:p-12">
-            <div className="relative flex w-full flex-grow items-center justify-center">
-              {isLoading && !quote ? (
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              ) : isVisualizing ? (
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              ) : quoteImage ? (
-                <Image
-                  src={quoteImage}
-                  alt={quote}
-                  width={512}
-                  height={512}
-                  className="rounded-lg object-cover"
-                />
-              ) : (
-                <blockquote className="transition-opacity duration-500 ease-in-out">
-                  <p className="font-quote text-2xl font-medium leading-relaxed text-slate-100 md:text-3xl">
-                    “
-                    {quoteWords.map((word, i) => (
-                      <span
-                        key={i}
-                        className="inline-block animate-fade-in-up"
-                        style={{ animationDelay: `${i * 100}ms` }}
-                      >
+          <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary hover:shadow-primary/50">
+            <CardContent className="flex min-h-[280px] flex-col items-center justify-center gap-8 p-8 md:p-12">
+              <div className="relative flex w-full flex-grow items-center justify-center">
+                {isLoading && !quote ? (
+                  <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                ) : isVisualizing ? (
+                  <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                ) : quoteImage ? (
+                  <Image
+                    src={quoteImage}
+                    alt={quote}
+                    width={512}
+                    height={512}
+                    className="rounded-lg object-cover"
+                  />
+                ) : (
+                  <blockquote className="transition-opacity duration-500 ease-in-out">
+                    <p className="font-quote text-2xl font-medium leading-relaxed text-slate-100 md:text-3xl">
+                      “
+                      {quoteWords.map((word, i) => (
                         <span
-                          className={cn(
-                            mainWords.some(
-                              (mainWord) =>
-                                mainWord.toLowerCase() ===
-                                word.replace(/[.,]/g, "").toLowerCase()
-                            ) && "text-primary font-semibold"
-                          )}
+                          key={i}
+                          className="inline-block animate-fade-in-up"
+                          style={{ animationDelay: `${i * 100}ms` }}
                         >
-                          {word}
+                          <span
+                            className={cn(
+                              mainWords.some(
+                                (mainWord) =>
+                                  mainWord.toLowerCase() ===
+                                  word.replace(/[.,]/g, "").toLowerCase()
+                              ) && "text-primary font-semibold"
+                            )}
+                          >
+                            {word}
+                          </span>
+                          &nbsp;
                         </span>
-                        &nbsp;
-                      </span>
-                    ))}
-                    ”
-                  </p>
-                  <div className="mt-4 flex justify-center gap-2">
-                    {quoteEmojis.map((emoji, index) => (
-                      <span
-                        key={index}
-                        className="text-2xl inline-block animate-fade-in-up"
-                        style={{
-                          animationDelay: `${
-                            (quoteWords.length + index) * 100
-                          }ms`,
-                        }}
-                      >
-                        {emoji}
-                      </span>
-                    ))}
-                  </div>
-                </blockquote>
-              )}
-            </div>
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="relative group">
-                <div
-                  className={cn(
-                    "absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 blur opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200",
-                    !isLoading && "animate-tilt"
-                  )}
-                ></div>
-                <Button
-                  onClick={fetchQuote}
-                  disabled={isLoading || isVisualizing}
-                  size="lg"
-                  className="relative group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="mr-2 h-6 w-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-125" />
-                      New Quote
-                    </>
-                  )}
-                </Button>
+                      ))}
+                      ”
+                    </p>
+                    <div className="mt-4 flex justify-center gap-2">
+                      {quoteEmojis.map((emoji, index) => (
+                        <span
+                          key={index}
+                          className="text-2xl inline-block animate-fade-in-up"
+                          style={{
+                            animationDelay: `${
+                              (quoteWords.length + index) * 100
+                            }ms`,
+                          }}
+                        >
+                          {emoji}
+                        </span>
+                      ))}
+                    </div>
+                  </blockquote>
+                )}
               </div>
-              {quote && !isLoading && (
-                <Button
-                  onClick={handleVisualize}
-                  disabled={isVisualizing}
-                  size="lg"
-                  variant="outline"
-                  className="relative group rounded-full bg-black/50 border-primary/50 px-10 py-8 text-xl font-bold text-primary shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/10 hover:shadow-primary/30 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-                >
-                  {isVisualizing ? (
-                    <>
-                      <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                      Visualizing...
-                    </>
-                  ) : (
-                    <>
-                      <ImageIcon className="mr-2 h-6 w-6" />
-                      Visualize Quote
-                    </>
-                  )}
-                </Button>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-        <div className="flex items-center justify-center gap-4 mt-2">
-          <Button
-            onClick={() => handleShare("whatsapp")}
-            variant="ghost"
-            size="icon"
-            className="group rounded-full bg-black/50 text-[#25D366] hover:bg-[#25D366]/90 hover:text-white transition-all duration-300 hover:scale-110"
-          >
-            <WhatsAppIcon />
-            <span className="sr-only">Share on WhatsApp</span>
-          </Button>
-          <Button
-            onClick={() => handleShare("instagram")}
-            variant="ghost"
-            size="icon"
-            className="group rounded-full bg-black/50 text-[#E4405F] hover:bg-[#E4405F]/90 hover:text-white transition-all duration-300 hover:scale-110"
-          >
-            <Send className="h-5 w-5" />
-            <span className="sr-only">Copy for Instagram</span>
-          </Button>
-          <Button
-            onClick={() => handleShare("copy")}
-            variant="ghost"
-            size="icon"
-            className="group rounded-full bg-black/50 text-[#60A5FA] hover:bg-[#60A5FA]/90 hover:text-white transition-all duration-300 hover:scale-110"
-          >
-            <Copy className="h-5 w-5" />
-            <span className="sr-only">Copy quote</span>
-          </Button>
-          <Button
-            onClick={handleDownload}
-            variant="ghost"
-            size="icon"
-            disabled={!quoteImage}
-            className="group rounded-full bg-black/50 text-slate-300 hover:bg-slate-500/90 hover:text-white transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Download className="h-5 w-5" />
-            <span className="sr-only">Download image</span>
-          </Button>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="relative group">
+                  <div
+                    className={cn(
+                      "absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 blur opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200",
+                      !isLoading && "animate-tilt"
+                    )}
+                  ></div>
+                  <Button
+                    onClick={fetchQuote}
+                    disabled={isLoading || isVisualizing}
+                    size="lg"
+                    className="relative group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="mr-2 h-6 w-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-125" />
+                        New Quote
+                      </>
+                    )}
+                  </Button>
+                </div>
+                {quote && !isLoading && (
+                  <Button
+                    onClick={handleVisualize}
+                    disabled={isVisualizing}
+                    size="lg"
+                    variant="outline"
+                    className="relative group rounded-full bg-black/50 border-primary/50 px-10 py-8 text-xl font-bold text-primary shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/10 hover:shadow-primary/30 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                  >
+                    {isVisualizing ? (
+                      <>
+                        <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                        Visualizing...
+                      </>
+                    ) : (
+                      <>
+                        <ImageIcon className="mr-2 h-6 w-6" />
+                        Visualize Quote
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+          <div className="flex items-center justify-center gap-4 mt-2">
+            <Button
+              onClick={() => handleShare("whatsapp")}
+              variant="ghost"
+              size="icon"
+              className="group rounded-full bg-black/50 text-[#25D366] hover:bg-[#25D366]/90 hover:text-white transition-all duration-300 hover:scale-110"
+            >
+              <WhatsAppIcon />
+              <span className="sr-only">Share on WhatsApp</span>
+            </Button>
+            <Button
+              onClick={() => handleShare("instagram")}
+              variant="ghost"
+              size="icon"
+              className="group rounded-full bg-black/50 text-[#E4405F] hover:bg-[#E4405F]/90 hover:text-white transition-all duration-300 hover:scale-110"
+            >
+              <Send className="h-5 w-5" />
+              <span className="sr-only">Copy for Instagram</span>
+            </Button>
+            <Button
+              onClick={() => handleShare("copy")}
+              variant="ghost"
+              size="icon"
+              className="group rounded-full bg-black/50 text-[#60A5FA] hover:bg-[#60A5FA]/90 hover:text-white transition-all duration-300 hover:scale-110"
+            >
+              <Copy className="h-5 w-5" />
+              <span className="sr-only">Copy quote</span>
+            </Button>
+            <Button
+              onClick={handleDownload}
+              variant="ghost"
+              size="icon"
+              disabled={!quoteImage}
+              className="group rounded-full bg-black/50 text-slate-300 hover:bg-slate-500/90 hover:text-white transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Download className="h-5 w-5" />
+              <span className="sr-only">Download image</span>
+            </Button>
+          </div>
         </div>
-      </div>
+      </main>
 
       <div
         className="fixed bottom-4 right-4 z-30 cursor-pointer"
@@ -459,5 +461,6 @@ export default function Home() {
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
+}
