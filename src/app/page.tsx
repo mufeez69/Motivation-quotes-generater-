@@ -115,6 +115,7 @@ const styles = [
 export default function Home() {
   const [quote, setQuote] = useState("");
   const [quoteEmojis, setQuoteEmojis] = useState<string[]>([]);
+  const [mainWords, setMainWords] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isVisualizing, setIsVisualizing] = useState(false);
   const [quoteImage, setQuoteImage] = useState<string | null>(null);
@@ -130,6 +131,7 @@ export default function Home() {
     setQuoteImage(null);
     setQuote("");
     setQuoteEmojis([]);
+    setMainWords([]);
     try {
       const theme =
         selectedConcepts.length > 0
@@ -144,6 +146,7 @@ export default function Home() {
       });
       setQuote(result.quote);
       setQuoteEmojis(result.emojis);
+      setMainWords(result.mainWords || []);
     } catch (error) {
       console.error("Failed to generate quote:", error);
       toast({
@@ -155,6 +158,7 @@ export default function Home() {
         "The journey of a thousand miles begins with a single step. - Lao Tzu"
       );
       setQuoteEmojis(["🚀", "🌟"]);
+      setMainWords(["journey", "thousand", "single", "step"]);
     } finally {
       setIsLoading(false);
     }
@@ -302,7 +306,18 @@ export default function Home() {
                         className="inline-block animate-fade-in-up"
                         style={{ animationDelay: `${i * 100}ms` }}
                       >
-                        {word}&nbsp;
+                        <span
+                          className={cn(
+                            mainWords.some(
+                              (mainWord) =>
+                                mainWord.toLowerCase() ===
+                                word.replace(/[.,]/g, "").toLowerCase()
+                            ) && "text-primary font-semibold"
+                          )}
+                        >
+                          {word}
+                        </span>
+                        &nbsp;
                       </span>
                     ))}
                     ”

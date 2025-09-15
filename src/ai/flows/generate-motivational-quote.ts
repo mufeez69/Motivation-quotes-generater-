@@ -28,7 +28,14 @@ export type GenerateMotivationalQuoteInput = z.infer<
 
 const GenerateMotivationalQuoteOutputSchema = z.object({
   quote: z.string().describe('The generated motivational quote.'),
-  emojis: z.array(z.string()).describe('A list of 3-5 emojis that represent the theme of the quote.'),
+  emojis: z
+    .array(z.string())
+    .describe('A list of 3-5 emojis that represent the theme of the quote.'),
+  mainWords: z
+    .array(z.string())
+    .describe(
+      'A list of 2-4 key words from the quote that should be highlighted.'
+    ),
 });
 export type GenerateMotivationalQuoteOutput = z.infer<
   typeof GenerateMotivationalQuoteOutputSchema
@@ -44,7 +51,7 @@ const prompt = ai.definePrompt({
   name: 'generateMotivationalQuotePrompt',
   input: {schema: GenerateMotivationalQuoteInputSchema},
   output: {schema: GenerateMotivationalQuoteOutputSchema},
-  prompt: `You are a motivational quote generator. Generate a quote based on the following theme and style. Also, provide a list of 3-5 emojis that are relevant to the quote's theme.
+  prompt: `You are a motivational quote generator. Generate a quote based on the following theme and style. Also, provide a list of 3-5 emojis that are relevant to the quote's theme, and a list of 2-4 of the most important words from the quote.
 Theme: {{{theme}}}
 Style: {{{style}}}
 
