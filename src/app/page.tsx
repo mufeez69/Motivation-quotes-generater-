@@ -294,7 +294,7 @@ export default function Home() {
                 />
               ) : (
                 <blockquote className="transition-opacity duration-500 ease-in-out">
-                  <p className="text-3xl font-medium leading-relaxed text-slate-100 md:text-4xl">
+                  <p className="font-quote text-2xl font-medium leading-relaxed text-slate-100 md:text-3xl">
                     “
                     {quoteWords.map((word, i) => (
                       <span
