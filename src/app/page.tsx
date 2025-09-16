@@ -5,6 +5,13 @@ import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
   Loader2,
   Zap,
   Copy,
@@ -18,6 +25,7 @@ import {
   Trophy,
   ShieldOff,
   TrendingUp,
+  MoreVertical,
 } from "lucide-react";
 import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quote";
 import { generateQuoteImage } from "@/ai/flows/generate-quote-image";
@@ -26,6 +34,7 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const WhatsAppIcon = () => (
   <svg
@@ -98,6 +107,11 @@ const styles = [
   "philosophical", "encouraging", "visionary", "reflective"
 ];
 
+type VisualizedQuote = {
+  quote: string;
+  imageUrl: string;
+};
+
 export default function Home() {
   const [quote, setQuote] = useState("");
   const [quoteEmojis, setQuoteEmojis] = useState<string[]>([]);
@@ -108,6 +122,7 @@ export default function Home() {
   const [showSignature, setShowSignature] = useState(false);
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([]);
   const [customPrompt, setCustomPrompt] = useState("");
+  const [history, setHistory] = useState<VisualizedQuote[]>([]);
   const { toast } = useToast();
 
   const luxuryBg = PlaceHolderImages.find((p) => p.id === "luxury-background");
@@ -171,6 +186,10 @@ export default function Home() {
     try {
       const result = await generateQuoteImage({ quote });
       setQuoteImage(result.imageUrl);
+      setHistory((prev) => [
+        { quote, imageUrl: result.imageUrl },
+        ...prev,
+      ]);
     } catch (error) {
       console.error("Failed to generate quote image:", error);
       toast({
@@ -276,9 +295,51 @@ export default function Home() {
             })}
           </div>
 
-          <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/80 hover:shadow-primary/50">
-            <CardContent className="flex flex-col items-center justify-center gap-8 p-6 md:p-12">
-              <div className="relative flex w-full min-h-[240px] flex-grow items-center justify-center">
+          <Card className="relative w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/80 hover:shadow-primary/50">
+            {history.length > 0 && (
+              <div className="absolute top-4 right-4 z-10">
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full text-white/70 hover:bg-white/10 hover:text-white"
+                    >
+                      <MoreVertical className="h-5 w-5" />
+                      <span className="sr-only">View History</span>
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent>
+                    <SheetHeader>
+                      <SheetTitle>Visualization History</SheetTitle>
+                    </SheetHeader>
+                    <ScrollArea className="h-[calc(100%-4rem)] mt-4">
+                      <div className="grid gap-4 pr-4">
+                        {history.map((item, index) => (
+                          <div
+                            key={index}
+                            className="flex flex-col gap-2 p-2 rounded-lg bg-secondary"
+                          >
+                            <Image
+                              src={item.imageUrl}
+                              alt={item.quote}
+                              width={400}
+                              height={400}
+                              className="rounded-md object-cover"
+                            />
+                            <p className="text-sm text-muted-foreground italic">
+                              "{item.quote}"
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </SheetContent>
+                </Sheet>
+              </div>
+            )}
+            <CardContent className="flex flex-col items-center justify-center gap-6 p-6 md:gap-8 md:p-12">
+              <div className="relative flex w-full min-h-[180px] md:min-h-[240px] flex-grow items-center justify-center">
                 {isLoading && !quote ? (
                   <Loader2 className="h-12 w-12 animate-spin text-primary" />
                 ) : isVisualizing ? (
@@ -293,7 +354,7 @@ export default function Home() {
                   />
                 ) : (
                   <blockquote className="transition-opacity duration-500 ease-in-out">
-                    <p className="font-quote text-xl font-medium leading-relaxed text-slate-100 md:text-2xl">
+                    <p className="font-quote text-lg font-medium leading-relaxed text-slate-100 md:text-2xl">
                       “
                       {quoteWords.map((word, i) => (
                         <span
