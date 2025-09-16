@@ -122,7 +122,7 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         tilt: 'tilt 10s infinite linear',
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
-        'border-color-change': 'border-color-change 4s linear infinite',
+        'border-color-change': 'border-color-change 8s linear infinite',
       },
     },
   },
