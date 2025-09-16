@@ -24,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 
 const WhatsAppIcon = () => (
   <svg
@@ -105,6 +106,7 @@ export default function Home() {
   const [quoteImage, setQuoteImage] = useState<string | null>(null);
   const [showSignature, setShowSignature] = useState(false);
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([]);
+  const [customPrompt, setCustomPrompt] = useState("");
   const { toast } = useToast();
 
   const luxuryBg = PlaceHolderImages.find((p) => p.id === "luxury-background");
@@ -117,8 +119,9 @@ export default function Home() {
     setQuoteEmojis([]);
     setMainWords([]);
     try {
-      const theme =
-        selectedConcepts.length > 0
+      const theme = customPrompt.trim()
+        ? customPrompt.trim()
+        : selectedConcepts.length > 0
           ? selectedConcepts.join(", ")
           : themes[Math.floor(Math.random() * themes.length)];
 
@@ -146,7 +149,7 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, [toast, selectedConcepts]);
+  }, [toast, selectedConcepts, customPrompt]);
 
   useEffect(() => {
     fetchQuote();
@@ -224,6 +227,12 @@ export default function Home() {
   };
 
   const signatureText = "made by MUFIZ MIRZA".split(" ");
+  
+  const handlePromptKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      fetchQuote();
+    }
+  };
 
   return (
     <div className="relative">
@@ -267,8 +276,8 @@ export default function Home() {
           </div>
 
           <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/80 hover:shadow-primary/50">
-            <CardContent className="flex min-h-[280px] flex-col items-center justify-center gap-8 p-8 md:p-12">
-              <div className="relative flex w-full flex-grow items-center justify-center">
+            <CardContent className="flex flex-col items-center justify-center gap-8 p-8 md:p-12">
+              <div className="relative flex w-full min-h-[280px] flex-grow items-center justify-center">
                 {isLoading && !quote ? (
                   <Loader2 className="h-12 w-12 animate-spin text-primary" />
                 ) : isVisualizing ? (
@@ -325,54 +334,67 @@ export default function Home() {
                   </blockquote>
                 )}
               </div>
-              <div className="flex flex-col sm:flex-row items-center gap-4">
-                <div className="relative group">
-                  <div
-                    className={cn(
-                      "absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 blur opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200",
-                      !isLoading && "animate-tilt"
-                    )}
-                  ></div>
-                  <Button
-                    onClick={fetchQuote}
-                    disabled={isLoading || isVisualizing}
-                    size="lg"
-                    className="relative group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-                  >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <Zap className="mr-2 h-6 w-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-125" />
-                        New Quote
-                      </>
-                    )}
-                  </Button>
+              <div className="flex w-full flex-col items-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <div className="relative group">
+                    <div
+                      className={cn(
+                        "absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 blur opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200",
+                        !isLoading && "animate-tilt"
+                      )}
+                    ></div>
+                    <Button
+                      onClick={fetchQuote}
+                      disabled={isLoading || isVisualizing}
+                      size="lg"
+                      className="relative group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Zap className="mr-2 h-6 w-6 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-125" />
+                          New Quote
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                  {quote && !isLoading && (
+                    <Button
+                      onClick={handleVisualize}
+                      disabled={isVisualizing}
+                      size="lg"
+                      variant="outline"
+                      className="relative group rounded-full bg-black/50 border-primary/50 px-10 py-8 text-xl font-bold text-primary shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/10 hover:shadow-primary/30 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                    >
+                      {isVisualizing ? (
+                        <>
+                          <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                          Visualizing...
+                        </>
+                      ) : (
+                        <>
+                          <ImageIcon className="mr-2 h-6 w-6" />
+                          Visualize Quote
+                        </>
+                      )}
+                    </Button>
+                  )}
                 </div>
-                {quote && !isLoading && (
-                  <Button
-                    onClick={handleVisualize}
-                    disabled={isVisualizing}
-                    size="lg"
-                    variant="outline"
-                    className="relative group rounded-full bg-black/50 border-primary/50 px-10 py-8 text-xl font-bold text-primary shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/10 hover:shadow-primary/30 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-                  >
-                    {isVisualizing ? (
-                      <>
-                        <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                        Visualizing...
-                      </>
-                    ) : (
-                      <>
-                        <ImageIcon className="mr-2 h-6 w-6" />
-                        Visualize Quote
-                      </>
-                    )}
-                  </Button>
-                )}
+                 <div className="w-full max-w-md mt-4">
+                    <Input
+                      type="text"
+                      placeholder="Or type your own theme..."
+                      value={customPrompt}
+                      onChange={(e) => setCustomPrompt(e.target.value)}
+                      onKeyDown={handlePromptKeyDown}
+                      className="w-full rounded-full border-2 border-primary/30 bg-black/60 px-6 py-5 text-center text-white placeholder:text-white/50 focus:border-primary/80 focus:ring-primary/50"
+                      disabled={isLoading || isVisualizing}
+                    />
+                  </div>
               </div>
             </CardContent>
           </Card>
