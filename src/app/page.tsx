@@ -277,8 +277,8 @@ export default function Home() {
           </div>
 
           <Card className="w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/80 hover:shadow-primary/50">
-            <CardContent className="flex flex-col items-center justify-center gap-8 p-8 md:p-12">
-              <div className="relative flex w-full min-h-[280px] flex-grow items-center justify-center">
+            <CardContent className="flex flex-col items-center justify-center gap-8 p-6 md:p-12">
+              <div className="relative flex w-full min-h-[240px] flex-grow items-center justify-center">
                 {isLoading && !quote ? (
                   <Loader2 className="h-12 w-12 animate-spin text-primary" />
                 ) : isVisualizing ? (
@@ -293,7 +293,7 @@ export default function Home() {
                   />
                 ) : (
                   <blockquote className="transition-opacity duration-500 ease-in-out">
-                    <p className="font-quote text-2xl font-medium leading-relaxed text-slate-100 md:text-3xl">
+                    <p className="font-quote text-xl font-medium leading-relaxed text-slate-100 md:text-2xl">
                       “
                       {quoteWords.map((word, i) => (
                         <span
@@ -347,7 +347,7 @@ export default function Home() {
                       onClick={fetchQuote}
                       disabled={isLoading || isVisualizing}
                       size="lg"
-                      className="relative group rounded-full bg-primary px-10 py-8 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                      className="relative group rounded-full bg-primary px-8 py-6 text-lg md:px-10 md:py-8 md:text-xl font-bold text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:shadow-primary/60 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     >
                       {isLoading ? (
                         <>
@@ -368,7 +368,7 @@ export default function Home() {
                       disabled={isVisualizing}
                       size="lg"
                       variant="outline"
-                      className="relative group rounded-full bg-black/50 border-2 px-10 py-8 text-xl font-bold text-primary shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/10 hover:shadow-primary/30 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black animate-border-color-change"
+                      className="relative group rounded-full bg-black/50 border-2 px-8 py-6 text-lg md:px-10 md:py-8 md:text-xl font-bold text-primary shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/10 hover:shadow-primary/30 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black animate-border-color-change"
                     >
                       {isVisualizing ? (
                         <>
@@ -391,7 +391,7 @@ export default function Home() {
                       value={customPrompt}
                       onChange={(e) => setCustomPrompt(e.target.value)}
                       onKeyDown={handlePromptKeyDown}
-                      className="w-full rounded-full border-2 bg-black/60 px-6 py-5 text-center text-white placeholder:text-white/50 focus:ring-0 animate-border-color-change"
+                      className="w-full rounded-full border-2 bg-black/60 px-6 py-4 text-base md:py-5 text-center text-white placeholder:text-white/50 focus:ring-0 animate-border-color-change"
                       disabled={isLoading || isVisualizing}
                     />
                   </div>
@@ -468,5 +468,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
