@@ -296,26 +296,26 @@ export default function Home() {
           </div>
 
           <Card className="relative w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/80 hover:shadow-primary/50">
-            {history.length > 0 && (
-              <div className="absolute top-4 right-4 z-10">
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full text-white/70 hover:bg-white/10 hover:text-white"
-                    >
-                      <MoreVertical className="h-5 w-5" />
-                      <span className="sr-only">View History</span>
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent>
-                    <SheetHeader>
-                      <SheetTitle>Visualization History</SheetTitle>
-                    </SheetHeader>
-                    <ScrollArea className="h-[calc(100%-4rem)] mt-4">
-                      <div className="grid gap-4 pr-4">
-                        {history.map((item, index) => (
+            <div className="absolute top-4 right-4 z-10">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full text-white/70 hover:bg-white/10 hover:text-white"
+                  >
+                    <MoreVertical className="h-5 w-5" />
+                    <span className="sr-only">View History</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>Visualization History</SheetTitle>
+                  </SheetHeader>
+                  <ScrollArea className="h-[calc(100%-4rem)] mt-4">
+                    <div className="grid gap-4 pr-4">
+                      {history.length > 0 ? (
+                        history.map((item, index) => (
                           <div
                             key={index}
                             className="flex flex-col gap-2 p-2 rounded-lg bg-secondary"
@@ -331,13 +331,18 @@ export default function Home() {
                               "{item.quote}"
                             </p>
                           </div>
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  </SheetContent>
-                </Sheet>
-              </div>
-            )}
+                        ))
+                      ) : (
+                        <div className="text-center text-muted-foreground mt-8">
+                          <p>No visualizations yet.</p>
+                          <p className="text-sm">Generate a quote and click "Visualize" to see your history here.</p>
+                        </div>
+                      )}
+                    </div>
+                  </ScrollArea>
+                </SheetContent>
+              </Sheet>
+            </div>
             <CardContent className="flex flex-col items-center justify-center gap-6 p-6 md:gap-8 md:p-12">
               <div className="relative flex w-full min-h-[180px] md:min-h-[240px] flex-grow items-center justify-center">
                 {isLoading && !quote ? (
