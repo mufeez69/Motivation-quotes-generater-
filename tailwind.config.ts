@@ -111,10 +111,9 @@ export default {
           },
         },
         'border-color-change': {
-          '0%, 100%': { 'border-color': 'hsl(var(--primary))' },
-          '25%': { 'border-color': '#7DF9FF' }, // Electric Blue
-          '50%': { 'border-color': '#A020F0' }, // Vibrant Purple
-          '75%': { 'border-color': '#FF69B4' }, // Hot Pink
+          '0%, 100%': { 'border-color': '#7DF9FF' }, // Electric Blue
+          '33%': { 'border-color': '#A020F0' }, // Vibrant Purple
+          '66%': { 'border-color': '#FF69B4' }, // Hot Pink
         },
       },
       animation: {
@@ -128,3 +127,5 @@ export default {
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
+
+    
