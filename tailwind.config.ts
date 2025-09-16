@@ -110,12 +110,19 @@ export default {
             transform: 'translateY(0)',
           },
         },
+        'border-color-change': {
+          '0%, 100%': { 'border-color': 'hsl(var(--primary))' },
+          '25%': { 'border-color': '#7DF9FF' }, // Electric Blue
+          '50%': { 'border-color': '#A020F0' }, // Vibrant Purple
+          '75%': { 'border-color': '#FF69B4' }, // Hot Pink
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         tilt: 'tilt 10s infinite linear',
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
+        'border-color-change': 'border-color-change 4s linear infinite',
       },
     },
   },

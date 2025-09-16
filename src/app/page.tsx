@@ -391,7 +391,7 @@ export default function Home() {
                       value={customPrompt}
                       onChange={(e) => setCustomPrompt(e.target.value)}
                       onKeyDown={handlePromptKeyDown}
-                      className="w-full rounded-full border-2 border-primary/30 bg-black/60 px-6 py-5 text-center text-white placeholder:text-white/50 focus:border-primary/80 focus:ring-primary/50"
+                      className="w-full rounded-full border-2 bg-black/60 px-6 py-5 text-center text-white placeholder:text-white/50 focus:ring-0 animate-border-color-change"
                       disabled={isLoading || isVisualizing}
                     />
                   </div>
