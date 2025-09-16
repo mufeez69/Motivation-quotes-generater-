@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -339,8 +340,7 @@ export default function Home() {
                   <div className="relative group">
                     <div
                       className={cn(
-                        "absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 blur opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200",
-                        !isLoading && "animate-tilt"
+                        "absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 blur-xl opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200 animate-tilt"
                       )}
                     ></div>
                     <Button
@@ -368,7 +368,7 @@ export default function Home() {
                       disabled={isVisualizing}
                       size="lg"
                       variant="outline"
-                      className="relative group rounded-full bg-black/50 border-primary/50 px-10 py-8 text-xl font-bold text-primary shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/10 hover:shadow-primary/30 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                      className="relative group rounded-full bg-black/50 border-2 px-10 py-8 text-xl font-bold text-primary shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-primary/10 hover:shadow-primary/30 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black animate-border-color-change"
                     >
                       {isVisualizing ? (
                         <>
