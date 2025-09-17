@@ -12,6 +12,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Loader2,
   Zap,
   Copy,
@@ -26,8 +32,10 @@ import {
   ShieldOff,
   TrendingUp,
   MoreVertical,
+  History,
+  QuoteIcon,
 } from "lucide-react";
-import { generateMotivationalQuote } from "@/ai/flows/generate-motivational-quote";
+import { generateMotivationalQuote, GenerateMotivationalQuoteOutput } from "@/ai/flows/generate-motivational-quote";
 import { generateQuoteImage } from "@/ai/flows/generate-quote-image";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
@@ -41,7 +49,7 @@ const WhatsAppIcon = () => (
     xmlns="http://www.w3.org/2000/svg"
     width="24"
     height="24"
-    viewBox="0 0 24 24"
+    viewBox="0 0 24"
     fill="currentColor"
     className="h-5 w-5"
   >
@@ -112,6 +120,8 @@ type VisualizedQuote = {
   imageUrl: string;
 };
 
+type QuoteHistoryItem = GenerateMotivationalQuoteOutput;
+
 export default function Home() {
   const [quote, setQuote] = useState("");
   const [quoteEmojis, setQuoteEmojis] = useState<string[]>([]);
@@ -122,7 +132,11 @@ export default function Home() {
   const [showSignature, setShowSignature] = useState(false);
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([]);
   const [customPrompt, setCustomPrompt] = useState("");
-  const [history, setHistory] = useState<VisualizedQuote[]>([]);
+  const [visualizationHistory, setVisualizationHistory] = useState<VisualizedQuote[]>([]);
+  const [quoteHistory, setQuoteHistory] = useState<QuoteHistoryItem[]>([]);
+  const [isHistorySheetOpen, setIsHistorySheetOpen] = useState(false);
+  const [activeHistoryView, setActiveHistoryView] = useState<'visualization' | 'quote'>('visualization');
+
   const { toast } = useToast();
 
   const luxuryBg = PlaceHolderImages.find((p) => p.id === "luxury-background");
@@ -150,6 +164,7 @@ export default function Home() {
       setQuote(result.quote);
       setQuoteEmojis(result.emojis);
       setMainWords(result.mainWords || []);
+      setQuoteHistory((prev) => [result, ...prev]);
     } catch (error) {
       console.error("Failed to generate quote:", error);
       toast({
@@ -157,11 +172,14 @@ export default function Home() {
         description: "Could not fetch a new quote. Please try again later.",
         variant: "destructive",
       });
-      setQuote(
-        "The journey of a thousand miles begins with a single step. - Lao Tzu"
-      );
-      setQuoteEmojis(["🚀", "🌟"]);
-      setMainWords(["journey", "thousand", "single", "step"]);
+      const fallbackQuote = {
+        quote: "The journey of a thousand miles begins with a single step. - Lao Tzu",
+        emojis: ["🚀", "🌟"],
+        mainWords: ["journey", "thousand", "single", "step"],
+      };
+      setQuote(fallbackQuote.quote);
+      setQuoteEmojis(fallbackQuote.emojis);
+      setMainWords(fallbackQuote.mainWords);
     } finally {
       setIsLoading(false);
     }
@@ -186,7 +204,7 @@ export default function Home() {
     try {
       const result = await generateQuoteImage({ quote });
       setQuoteImage(result.imageUrl);
-      setHistory((prev) => [
+      setVisualizationHistory((prev) => [
         { quote, imageUrl: result.imageUrl },
         ...prev,
       ]);
@@ -246,6 +264,11 @@ export default function Home() {
     });
   };
 
+  const openHistorySheet = (view: 'visualization' | 'quote') => {
+    setActiveHistoryView(view);
+    setIsHistorySheetOpen(true);
+  }
+
   const signatureText = "made by MUFIZ MIRZA".split(" ");
   
   const handlePromptKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -297,54 +320,91 @@ export default function Home() {
 
           <Card className="relative w-full rounded-2xl border-primary/30 bg-black/60 shadow-2xl shadow-primary/20 backdrop-blur-md transition-all duration-500 hover:border-primary/80 hover:shadow-primary/50">
             <div className="absolute top-4 right-4 z-10">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full text-white/70 hover:bg-white/10 hover:text-white"
-                  >
-                    <MoreVertical className="h-5 w-5" />
-                    <span className="sr-only">View History</span>
-                  </Button>
-                </SheetTrigger>
+              <Sheet open={isHistorySheetOpen} onOpenChange={setIsHistorySheetOpen}>
+                <DropdownMenu>
+                   <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="rounded-full text-white/70 hover:bg-white/10 hover:text-white"
+                      >
+                        <MoreVertical className="h-5 w-5" />
+                        <span className="sr-only">Open History</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onSelect={() => openHistorySheet('visualization')}>
+                      <History className="mr-2 h-4 w-4" />
+                      <span>Visualization History</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => openHistorySheet('quote')}>
+                      <QuoteIcon className="mr-2 h-4 w-4" />
+                      <span>Quote History</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
                 <SheetContent>
                   <SheetHeader>
-                    <SheetTitle>Visualization History</SheetTitle>
+                    <SheetTitle>
+                      {activeHistoryView === 'visualization' ? 'Visualization History' : 'Quote History'}
+                    </SheetTitle>
                   </SheetHeader>
                   <ScrollArea className="h-[calc(100%-4rem)] mt-4">
-                    <div className="grid gap-4 pr-4">
-                      {history.length > 0 ? (
-                        history.map((item, index) => (
-                          <div
-                            key={index}
-                            className="flex flex-col gap-2 p-2 rounded-lg bg-secondary"
-                          >
-                            <Image
-                              src={item.imageUrl}
-                              alt={item.quote}
-                              width={400}
-                              height={400}
-                              className="rounded-md object-cover"
-                            />
-                            <p className="text-sm text-muted-foreground italic">
-                              "{item.quote}"
-                            </p>
+                    {activeHistoryView === 'visualization' ? (
+                       <div className="grid gap-4 pr-4">
+                        {visualizationHistory.length > 0 ? (
+                          visualizationHistory.map((item, index) => (
+                            <div
+                              key={index}
+                              className="flex flex-col gap-2 p-2 rounded-lg bg-secondary"
+                            >
+                              <Image
+                                src={item.imageUrl}
+                                alt={item.quote}
+                                width={400}
+                                height={400}
+                                className="rounded-md object-cover"
+                              />
+                              <p className="text-sm text-muted-foreground italic">
+                                "{item.quote}"
+                              </p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center text-muted-foreground mt-8">
+                            <p>No visualizations yet.</p>
+                            <p className="text-sm">Generate a quote and click "Visualize" to see your history here.</p>
                           </div>
-                        ))
-                      ) : (
-                        <div className="text-center text-muted-foreground mt-8">
-                          <p>No visualizations yet.</p>
-                          <p className="text-sm">Generate a quote and click "Visualize" to see your history here.</p>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    ) : (
+                       <div className="grid gap-4 pr-4">
+                        {quoteHistory.length > 0 ? (
+                          quoteHistory.map((item, index) => (
+                            <div key={index} className="flex flex-col gap-2 p-3 rounded-lg bg-secondary">
+                              <p className="text-base text-foreground italic">
+                                "{item.quote}"
+                              </p>
+                               <div className="flex justify-start gap-2">
+                                {item.emojis.map((emoji, i) => <span key={i}>{emoji}</span>)}
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center text-muted-foreground mt-8">
+                              <p>No quotes generated yet.</p>
+                              <p className="text-sm">Click "New Quote" to start your collection.</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </ScrollArea>
                 </SheetContent>
               </Sheet>
             </div>
-            <CardContent className="flex flex-col items-center justify-center gap-6 p-6 md:gap-8 md:p-12">
-              <div className="relative flex w-full min-h-[180px] md:min-h-[240px] flex-grow items-center justify-center">
+            <CardContent className="flex flex-col items-center justify-center gap-6 p-6 md:gap-8 md:p-8">
+              <div className="relative flex w-full min-h-[180px] md:min-h-[200px] flex-grow items-center justify-center">
                 {isLoading && !quote ? (
                   <Loader2 className="h-12 w-12 animate-spin text-primary" />
                 ) : isVisualizing ? (
@@ -534,3 +594,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
