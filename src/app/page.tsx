@@ -539,33 +539,34 @@ export default function Home() {
             </Button>
           </div>
         </div>
-      </main>
 
-      <div
-        className="fixed bottom-4 right-4 z-30 cursor-pointer"
-        onClick={() => setShowSignature(!showSignature)}
-      >
-        {!showSignature ? (
-          <div className="flex items-center gap-2 text-white/50 hover:text-white/80 transition-colors">
-            <Sparkles className="h-4 w-4 animate-pulse" />
-            <span className="text-xs font-mono">...</span>
-          </div>
-        ) : (
-          <div className="flex items-center gap-1.5 text-sm font-medium">
-            {signatureText.map((word, index) => (
-              <span
-                key={index}
-                className="inline-block animate-fade-in-up bg-gradient-to-r from-fuchsia-500 via-red-500 to-amber-500 bg-clip-text text-transparent"
-                style={{
-                  animationDelay: `${index * 100}ms`,
-                }}
-              >
-                {word}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+        <div
+          className="fixed bottom-4 right-4 z-30 cursor-pointer"
+          onClick={() => setShowSignature(!showSignature)}
+        >
+          {!showSignature ? (
+            <div className="flex items-center gap-2 text-white/50 hover:text-white/80 transition-colors">
+              <Sparkles className="h-4 w-4 animate-pulse" />
+              <span className="text-xs font-mono">...</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 text-sm font-medium">
+              {signatureText.map((word, index) => (
+                <span
+                  key={index}
+                  className="inline-block animate-fade-in-up bg-gradient-to-r from-fuchsia-500 via-red-500 to-amber-500 bg-clip-text text-transparent"
+                  style={{
+                    animationDelay: `${index * 100}ms`,
+                  }}
+                >
+                  {word}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
-}
+
+    
