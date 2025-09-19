@@ -27,7 +27,6 @@ import {
   Repeat,
   Image as ImageIcon,
   Download,
-  Sparkles,
   Trophy,
   ShieldOff,
   TrendingUp,
@@ -174,8 +173,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchQuote();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchQuote]);
   
   const handleConceptClick = (concept: string) => {
     setSelectedConcepts((prev) =>
@@ -546,8 +544,7 @@ export default function Home() {
         >
           {!showSignature ? (
             <div className="flex items-center gap-2 text-white/50 hover:text-white/80 transition-colors">
-              <Sparkles className="h-4 w-4 animate-pulse" />
-              <span className="text-xs font-mono">...</span>
+              <p className="text-xs font-mono">...</p>
             </div>
           ) : (
             <div className="flex items-center gap-1.5 text-sm font-medium">
