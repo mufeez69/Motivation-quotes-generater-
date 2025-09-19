@@ -253,7 +253,7 @@ export default function Home() {
     setIsHistorySheetOpen(true);
   }
 
-  const signatureText = "made by MUFIZ MIRZA".split(" ");
+  const signatureText = "made by MUZIF MIRZA".split(" ");
   
   const handlePromptKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -568,5 +568,7 @@ export default function Home() {
       </main>
     </div>
   );
+
+    
 
     
